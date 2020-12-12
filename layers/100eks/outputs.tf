@@ -30,6 +30,8 @@ output "summary" {
 ## Run to configure Kubectl to connect to your new EKS cluster:
 $ aws eks update-kubeconfig --name ${module.eks.cluster_id}
 
+# deploy EFS storage driver
+kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernetes/overlays/stable/?ref=master"
 
 EOF
 
