@@ -57,14 +57,13 @@ data "aws_availability_zones" "available" {
 module "base_network" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "2.64.0"
-  
+
   name                 = var.vpc_name
   cidr                 = var.cidr_range
   azs                  = data.aws_availability_zones.available.names
   private_subnets      = var.public_cidr_ranges
   public_subnets       = var.private_cidr_ranges
   enable_nat_gateway   = true
-  single_nat_gateway   = true
   enable_dns_hostnames = true
 
   public_subnet_tags = {

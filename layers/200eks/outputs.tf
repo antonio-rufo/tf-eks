@@ -21,19 +21,7 @@ output "config_map_aws_auth" {
   value       = module.eks.config_map_aws_auth
 }
 
-###############################################################################
-# kubectl config
-###############################################################################
-output "summary" {
-  value = <<EOF
-
-## Run to configure Kubectl to connect to your new EKS cluster:
-$ aws eks update-kubeconfig --name ${module.eks.cluster_id}
-
-# deploy EFS storage driver
-kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernetes/overlays/stable/?ref=master"
-
-EOF
-
-  description = "Configures kubectl so that you can connect to an Amazon EKS cluster. `terraform output summary` "
+output "cluster_id" {
+  description = "The name/id of the EKS cluster."
+  value       = module.eks.cluster_id
 }
