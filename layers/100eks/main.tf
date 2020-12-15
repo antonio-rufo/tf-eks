@@ -85,9 +85,9 @@ data "terraform_remote_state" "base_network" {
 
 # Remote State Locals
 locals {
-  vpc_id          = data.terraform_remote_state.base_network.outputs.base_network.vpc_id
-  private_subnets = data.terraform_remote_state.base_network.outputs.base_network.private_subnets
-  public_subnets  = data.terraform_remote_state.base_network.outputs.base_network.public_subnets
+  vpc_id          = data.terraform_remote_state.base_network.outputs.vpc_id
+  private_subnets = data.terraform_remote_state.base_network.outputs.private_subnets
+  public_subnets  = data.terraform_remote_state.base_network.outputs.public_subnets
 }
 
 data "aws_caller_identity" "current" {}
@@ -106,26 +106,28 @@ resource "aws_security_group" "worker_group_mgmt_one" {
 
     cidr_blocks = [
       "10.0.0.0/8",
+      "0.0.0.0/0",
     ]
   }
 }
 
-resource "aws_security_group" "all_worker_mgmt" {
-  name_prefix = "all_worker_management"
-  vpc_id      = local.vpc_id
-
-  ingress {
-    from_port = 22
-    to_port   = 22
-    protocol  = "tcp"
-
-    cidr_blocks = [
-      "10.0.0.0/8",
-      "172.16.0.0/12",
-      "192.168.0.0/16",
-    ]
-  }
-}
+# resource "aws_security_group" "all_worker_mgmt" {
+#   name_prefix = "all_worker_management"
+#   vpc_id      = local.vpc_id
+#
+#   ingress {
+#     from_port = 22
+#     to_port   = 22
+#     protocol  = "tcp"
+#
+#     cidr_blocks = [
+#       "10.0.0.0/8",
+#       "172.16.0.0/12",
+#       "192.168.0.0/16",
+#       "0.0.0.0/0",
+#     ]
+#   }
+# }
 
 ###############################################################################
 # EKS
@@ -149,10 +151,13 @@ module "eks" {
       additional_userdata           = "echo foo bar"
       asg_desired_capacity          = 1
       additional_security_group_ids = [aws_security_group.worker_group_mgmt_one.id]
+      # key_name                      = "162198556136-ap-southeast-2-production-internal"
+      # key_name                      = "BigDataUdemyPPK"
+      public_ip                     = true
     },
   ]
 
-  worker_additional_security_group_ids = [aws_security_group.all_worker_mgmt.id]
+  # worker_additional_security_group_ids = [aws_security_group.all_worker_mgmt.id]
   # map_roles                            = var.map_roles
   # map_users                            = var.map_users
   # map_accounts                         = var.map_accounts
