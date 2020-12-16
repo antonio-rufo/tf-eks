@@ -28,7 +28,7 @@ data "aws_eks_cluster_auth" "cluster" {
 locals {
   tags = {
     Environment     = var.environment
-    ServiceProvider = "Rackspace"
+    ServiceProvider = "Antonio"
   }
 }
 
@@ -50,7 +50,7 @@ terraform {
 
   backend "s3" {
     # Get S3 Bucket name from layer _main (`terraform output state_bucket_id`)
-    bucket = "162198556136-build-state-bucket-antonio-appmod-fin"
+    bucket = "130541009828-build-state-bucket-antonio-appmod-fin"
     # This key must be unique for each layer!
     key     = "terraform.development.200eks.tfstate"
     region  = "ap-southeast-2"
@@ -80,7 +80,7 @@ data "terraform_remote_state" "base_network" {
   backend = "s3"
 
   config = {
-    bucket  = "162198556136-build-state-bucket-antonio-appmod-fin"
+    bucket  = "130541009828-build-state-bucket-antonio-appmod-fin"
     key     = "terraform.development.000base.tfstate"
     region  = "ap-southeast-2"
     encrypt = "true"
@@ -92,7 +92,7 @@ data "terraform_remote_state" "efs" {
   backend = "s3"
 
   config = {
-    bucket  = "162198556136-build-state-bucket-antonio-appmod-fin"
+    bucket  = "130541009828-build-state-bucket-antonio-appmod-fin"
     key     = "terraform.development.100efs.tfstate"
     region  = "ap-southeast-2"
     encrypt = "true"
@@ -204,8 +204,8 @@ module "eks" {
   ]
 
   workers_additional_policies = [
-  aws_iam_policy.autoscaler_policy.arn
-]
+    aws_iam_policy.autoscaler_policy.arn
+  ]
 
   # worker_additional_security_group_ids = [aws_security_group.all_worker_mgmt.id]
   # map_roles                            = var.map_roles

@@ -13,7 +13,7 @@ provider "aws" {
 locals {
   tags = {
     Environment     = var.environment
-    ServiceProvider = "Rackspace"
+    ServiceProvider = "Antonio"
   }
 }
 
@@ -31,7 +31,7 @@ terraform {
 
   backend "s3" {
     # Get S3 Bucket name from layer _main (`terraform output state_bucket_id`)
-    bucket = "162198556136-build-state-bucket-antonio-appmod-fin"
+    bucket = "130541009828-build-state-bucket-antonio-appmod-fin"
     # This key must be unique for each layer!
     key     = "terraform.development.100efs.tfstate"
     region  = "ap-southeast-2"
@@ -61,7 +61,7 @@ data "terraform_remote_state" "base_network" {
   backend = "s3"
 
   config = {
-    bucket  = "162198556136-build-state-bucket-antonio-appmod-fin"
+    bucket  = "130541009828-build-state-bucket-antonio-appmod-fin"
     key     = "terraform.development.000base.tfstate"
     region  = "ap-southeast-2"
     encrypt = "true"
@@ -70,10 +70,10 @@ data "terraform_remote_state" "base_network" {
 
 # Remote State Locals
 locals {
-  vpc_id           = data.terraform_remote_state.base_network.outputs.vpc_id
-  private_subnets  = data.terraform_remote_state.base_network.outputs.private_subnets
-  public_subnets   = data.terraform_remote_state.base_network.outputs.public_subnets
-  vpc_cidr         = data.terraform_remote_state.base_network.outputs.vpc_cidr
+  vpc_id          = data.terraform_remote_state.base_network.outputs.vpc_id
+  private_subnets = data.terraform_remote_state.base_network.outputs.private_subnets
+  public_subnets  = data.terraform_remote_state.base_network.outputs.public_subnets
+  vpc_cidr        = data.terraform_remote_state.base_network.outputs.vpc_cidr
 }
 
 data "aws_caller_identity" "current" {}

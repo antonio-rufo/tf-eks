@@ -13,7 +13,7 @@ provider "aws" {
 locals {
   tags = {
     Environment     = var.environment
-    ServiceProvider = "Rackspace"
+    ServiceProvider = "Antonio"
   }
 }
 
@@ -29,7 +29,7 @@ terraform {
   }
   backend "s3" {
     # Get S3 Bucket name from layer _main (`terraform output state_bucket_id`)
-    bucket = "162198556136-build-state-bucket-antonio-appmod-fin"
+    bucket = "130541009828-build-state-bucket-antonio-appmod-fin"
     # This key must be unique for each layer!
     key     = "terraform.development.000base.tfstate"
     region  = "ap-southeast-2"
@@ -68,11 +68,11 @@ module "base_network" {
 
   public_subnet_tags = {
     "kubernetes.io/cluster/${var.cluster_name}" = "shared"
-    "kubernetes.io/role/elb"                      = "1"
+    "kubernetes.io/role/elb"                    = "1"
   }
 
   private_subnet_tags = {
     "kubernetes.io/cluster/${var.cluster_name}" = "shared"
-    "kubernetes.io/role/internal-elb"             = "1"
+    "kubernetes.io/role/internal-elb"           = "1"
   }
 }

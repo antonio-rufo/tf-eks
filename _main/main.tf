@@ -14,9 +14,9 @@ provider "aws" {
 terraform {
   required_version = ">= 0.14"
   required_providers {
-      aws = {
-        version = "~> 2.0"
-      }
+    aws = {
+      version = "~> 2.0"
+    }
   }
 }
 
@@ -28,12 +28,8 @@ data "aws_caller_identity" "current" {}
 # Remote State Locals
 locals {
   tags = {
-    Environment       = var.environment
-    ServiceProvider  = "Rackspace"
-    Terraform         = "true"
-    appid-or-sso      = var.appid-or-sso
-    tag-std           = "v1.0"
-    needed-until-date = "2020-12-31"
+    Environment     = var.environment
+    ServiceProvider = "Antonio"
   }
 }
 ###############################################################################

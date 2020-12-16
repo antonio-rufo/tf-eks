@@ -28,7 +28,7 @@ provider "aws" {
 locals {
   tags = {
     Environment     = var.environment
-    ServiceProvider = "Rackspace"
+    ServiceProvider = "Antonio"
   }
 }
 
@@ -141,24 +141,24 @@ data "aws_eks_cluster_auth" "cluster" {
 }
 
 resource "kubectl_manifest" "jenkins-ns" {
-    yaml_body = file("jenkins/jenkins.ns.yaml")
+  yaml_body = file("jenkins/jenkins.ns.yaml")
 }
 
 resource "kubectl_manifest" "jenkins-pv" {
-    yaml_body = templatefile("jenkins/jenkins.pv.yaml", {efs_id = local.efs_id })
+  yaml_body = templatefile("jenkins/jenkins.pv.yaml", { efs_id = local.efs_id })
 }
 
 resource "kubectl_manifest" "jenkins-pvc" {
-    yaml_body = file("jenkins/jenkins.pvc.yaml")
-    depends_on = [kubectl_manifest.jenkins-ns, kubectl_manifest.jenkins-pv]
+  yaml_body  = file("jenkins/jenkins.pvc.yaml")
+  depends_on = [kubectl_manifest.jenkins-ns, kubectl_manifest.jenkins-pv]
 }
 
 resource "kubectl_manifest" "jenkins-rbac" {
-    yaml_body = file("jenkins/jenkins.rbac.yaml")
-    depends_on = [kubectl_manifest.jenkins-pvc]
+  yaml_body  = file("jenkins/jenkins.rbac.yaml")
+  depends_on = [kubectl_manifest.jenkins-pvc]
 }
 
 resource "kubectl_manifest" "jenkins-deployment" {
-    yaml_body = file("jenkins/jenkins.deployment.yaml")
-    depends_on = [kubectl_manifest.jenkins-rbac]
+  yaml_body  = file("jenkins/jenkins.deployment.yaml")
+  depends_on = [kubectl_manifest.jenkins-rbac]
 }
