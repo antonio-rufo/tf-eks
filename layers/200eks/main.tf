@@ -147,6 +147,33 @@ resource "aws_security_group" "worker_group_mgmt_one" {
 #   }
 # }
 
+resource "aws_iam_policy" "autoscaler_policy" {
+  name        = "autoscaler"
+  path        = "/"
+  description = "Autoscaler bots are fully allowed to read/run autoscaling groups"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+    "Action": [
+      "autoscaling:DescribeAutoScalingGroups",
+      "autoscaling:DescribeAutoScalingInstances",
+      "autoscaling:DescribeLaunchConfigurations",
+      "autoscaling:DescribeTags",
+      "autoscaling:SetDesiredCapacity",
+      "autoscaling:TerminateInstanceInAutoScalingGroup",
+      "ec2:DescribeLaunchTemplateVersions"
+    ],
+    "Resource": "*",
+    "Effect": "Allow"
+    }
+  ]
+}
+EOF
+}
+
 ###############################################################################
 # EKS
 ###############################################################################
@@ -167,11 +194,18 @@ module "eks" {
       name                          = "worker-group-1"
       instance_type                 = "t2.small"
       additional_userdata           = "echo foo bar"
-      asg_desired_capacity          = 1
+      asg_desired_capacity          = 2
+      asg_max_size                  = 5
+      asg_min_size                  = 2
+      autoscaling_enabled           = true
       additional_security_group_ids = [aws_security_group.worker_group_mgmt_one.id]
       public_ip                     = true
     },
   ]
+
+  workers_additional_policies = [
+  aws_iam_policy.autoscaler_policy.arn
+]
 
   # worker_additional_security_group_ids = [aws_security_group.all_worker_mgmt.id]
   # map_roles                            = var.map_roles
