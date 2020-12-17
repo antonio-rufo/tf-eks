@@ -37,17 +37,6 @@ terraform {
   }
 }
 
-###############################################################################
-# Data Sources
-###############################################################################
-data "terraform_remote_state" "main_state" {
-  backend = "local"
-
-  config = {
-    path = "../../_main/terraform.tfstate"
-  }
-}
-
 data "aws_availability_zones" "available" {
 }
 

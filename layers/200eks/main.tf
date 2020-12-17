@@ -61,20 +61,6 @@ terraform {
 ###############################################################################
 # Terraform Remote State
 ###############################################################################
-# _main
-data "terraform_remote_state" "main_state" {
-  backend = "local"
-
-  config = {
-    path = "../../_main/terraform.tfstate"
-  }
-}
-
-# Remote State Locals
-locals {
-  state_bucket_id = data.terraform_remote_state.main_state.outputs.state_bucket_id
-}
-
 # 000base
 data "terraform_remote_state" "base_network" {
   backend = "s3"
@@ -194,9 +180,9 @@ module "eks" {
       name                          = "worker-group-1"
       instance_type                 = "t2.small"
       additional_userdata           = "echo foo bar"
-      asg_desired_capacity          = 2
+      asg_desired_capacity          = 1
       asg_max_size                  = 5
-      asg_min_size                  = 2
+      asg_min_size                  = 1
       autoscaling_enabled           = true
       additional_security_group_ids = [aws_security_group.worker_group_mgmt_one.id]
       public_ip                     = true

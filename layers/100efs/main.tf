@@ -42,20 +42,6 @@ terraform {
 ###############################################################################
 # Terraform Remote State
 ###############################################################################
-# _main
-data "terraform_remote_state" "main_state" {
-  backend = "local"
-
-  config = {
-    path = "../../_main/terraform.tfstate"
-  }
-}
-
-# Remote State Locals
-locals {
-  state_bucket_id = data.terraform_remote_state.main_state.outputs.state_bucket_id
-}
-
 # 000base
 data "terraform_remote_state" "base_network" {
   backend = "s3"
