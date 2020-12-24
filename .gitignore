@@ -6,3 +6,5 @@
 *.iml
 .idea
 .terraform.*
+kubeconfig_*
+.env.secrets

@@ -1,0 +1,20 @@
+persistence:
+  enabled: true
+  size: "8Gi"
+
+master:
+  tag: "lts"
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    hostName: jenkins.rackspace.antoniorufo.com
+    jenkinsUrl: "https://jenkins.rackspace.antoniorufo.com"
+  overwritePlugins: true
+  installPlugins:
+    - kubernetes:1.25.7
+    - workflow-job:2.39
+    - workflow-aggregator:2.6
+    - credentials-binding:1.23
+    - git:4.2.2
+    - configuration-as-code:1.41    
