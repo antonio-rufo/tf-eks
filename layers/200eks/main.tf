@@ -1,4 +1,6 @@
-# 200eks Layer
+###############################################################################
+#########################   200eks Layer  #########################
+###############################################################################
 
 ###############################################################################
 # Providers
@@ -46,7 +48,7 @@ terraform {
 
   backend "s3" {
     # Get S3 Bucket name from layer _main (`terraform output state_bucket_id`)
-    bucket = "162198556136-build-state-bucket-antonio-appmod-fin"
+    bucket = "130541009828-build-state-bucket-eks-helm"
     # This key must be unique for each layer!
     key     = "terraform.development.200eks.tfstate"
     region  = "ap-southeast-2"
@@ -57,26 +59,12 @@ terraform {
 ###############################################################################
 # Terraform Remote State
 ###############################################################################
-# _main
-data "terraform_remote_state" "main_state" {
-  backend = "local"
-
-  config = {
-    path = "../../_main/terraform.tfstate"
-  }
-}
-
-# Remote State Locals
-locals {
-  state_bucket_id = data.terraform_remote_state.main_state.outputs.state_bucket_id
-}
-
 # 000base
 data "terraform_remote_state" "base_network" {
   backend = "s3"
 
   config = {
-    bucket  = "162198556136-build-state-bucket-antonio-appmod-fin"
+    bucket  = "130541009828-build-state-bucket-eks-helm"
     key     = "terraform.development.000base.tfstate"
     region  = "ap-southeast-2"
     encrypt = "true"
@@ -155,8 +143,8 @@ module "eks" {
 
   worker_groups = [
     {
-      name                          = "worker-group-1"
-      instance_type                 = "t3.large"
+      name          = "worker-group-1"
+      instance_type = "t3.small"
       # additional_userdata           = "echo foo bar"
       asg_desired_capacity          = 2
       asg_max_size                  = 5
@@ -168,8 +156,8 @@ module "eks" {
   ]
 
   workers_additional_policies = [
-  aws_iam_policy.autoscaler_policy.arn
-]
+    aws_iam_policy.autoscaler_policy.arn
+  ]
 
   # map_roles                            = var.map_roles
   # map_users                            = var.map_users
