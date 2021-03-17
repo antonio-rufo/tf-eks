@@ -132,9 +132,9 @@ EOF
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
   cluster_name    = var.cluster_name
-  cluster_version = "1.18"
+  cluster_version = "1.16"
   subnets         = local.private_subnets
-  version         = "13.2.1"
+  # version         = "13.2.1"
 
   cluster_create_timeout          = "1h"
   cluster_endpoint_private_access = true
