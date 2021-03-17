@@ -1,14 +1,14 @@
 autoDiscovery:
-  clusterName: getting-started-eks
+  clusterName: eks-cluster
   enabled: true
 awsRegion: ap-southeast-2
 cloudProvider: aws
 rbac:
   create: true
 
-serviceMonitor:
-  enabled: true
-  interval: 10s
-  namespace: monitoring
-  selector:
-    release: prom
+# serviceMonitor:
+#   enabled: true
+#   interval: 10s
+#   namespace: monitoring
+#   selector:
+#     release: prom
